@@ -1,18 +1,15 @@
 package com.intexsoft.javacourse.tsymmerman;
 
-import com.rabbitmq.client.BuiltinExchangeType;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.*;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
-public class MessageGenerator {
+public class ProducerOfMessages {
 
-    public MessageGenerator(String nameQueueFirst, String nameQueueSecond, int secondsDelay) throws Exception {
+    public ProducerOfMessages(String nameQueueFirst, String nameQueueSecond, int secondsDelay) throws Exception {
         String[] arrayOfNameQueue = {nameQueueFirst, nameQueueSecond};
         Channel channel = getChannel();
         channel.exchangeDeclare(Main.EXCHANGE_NAME, BuiltinExchangeType.DIRECT);
