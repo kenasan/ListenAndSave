@@ -14,7 +14,6 @@ public class AmqpSender {
     /**
      * todo java doc
      */
-
     public void send(String exchange, String bindingKey, String message) {
         try {
             channel.basicPublish( exchange, bindingKey, null, message.getBytes( "UTF-8" ) );

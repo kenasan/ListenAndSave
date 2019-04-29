@@ -6,14 +6,13 @@ import lombok.Setter;
 import java.util.LinkedHashMap;
 
 /**
- * TODO replace this class
+ * TODO javadoc
  */
 @Getter
 @Setter
 public class MapUtil {
 
     private static LinkedHashMap<String, String> queueMessage = new LinkedHashMap();
-
 
     public static void setQueueMessage(String message, String bindingKey) {
         queueMessage.put( bindingKey, message );

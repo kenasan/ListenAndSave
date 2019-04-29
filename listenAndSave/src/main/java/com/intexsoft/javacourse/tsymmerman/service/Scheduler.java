@@ -8,8 +8,6 @@ import com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants;
  */
 public class Scheduler implements Runnable {
 
-
-
     @Override
     public void run() {
         while (true) {
@@ -22,8 +20,5 @@ public class Scheduler implements Runnable {
                 e.printStackTrace();
             }
         }
-
-
     }
-
 }
