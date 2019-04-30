@@ -24,10 +24,10 @@ public abstract class AmqpUtils {
      */
     public static void createConnection() {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost( HOST_NAME);
+        factory.setHost( HOST_NAME );
         try {
             Connection connection = factory.newConnection();
-            channel =  connection.createChannel();
+            channel = connection.createChannel();
             channel.exchangeDeclare( EXCHANGE, BuiltinExchangeType.DIRECT );
         } catch (IOException | TimeoutException e) {
             e.printStackTrace(); // todo logger

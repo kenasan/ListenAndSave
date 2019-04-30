@@ -9,7 +9,7 @@ public abstract class RabbitConstants {
     public static final String FIRST_ROUTING_KEY = "rk1";
     public static final String SECOND_ROUTING_KEY = "rk2";
     public static final int SECONDS_DELAY = 3;
-    public static final String FIRST_QUEUE_NQME = "q1";
-    public static final String SECOND_QUEUE_NQME = "q2";
+    public static final String FIRST_QUEUE_NAME = "q1";
+    public static final String SECOND_QUEUE_NAME = "q2";
 }
 

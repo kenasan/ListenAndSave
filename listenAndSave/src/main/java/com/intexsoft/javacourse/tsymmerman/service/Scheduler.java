@@ -1,6 +1,6 @@
 package com.intexsoft.javacourse.tsymmerman.service;
 
-import com.intexsoft.javacourse.tsymmerman.MessageGenerator;
+import com.intexsoft.javacourse.tsymmerman.Util.MessageGeneratorUtil;
 import com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants;
 
 /**
@@ -12,7 +12,7 @@ public class Scheduler implements Runnable {
     public void run() {
         while (true) {
             try {
-                MessageGenerator messageGenerator = new MessageGenerator();
+                MessageGeneratorUtil messageGenerator = new MessageGeneratorUtil();
                 AmqpSender amqpSender = new AmqpSender();
                 amqpSender.send( RabbitConstants.EXCHANGE, messageGenerator.getBindingKey(), messageGenerator.getMessage() );
                 Thread.sleep( RabbitConstants.SECONDS_DELAY * 1000 );
