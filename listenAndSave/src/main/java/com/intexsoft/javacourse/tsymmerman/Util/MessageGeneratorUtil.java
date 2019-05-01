@@ -15,7 +15,7 @@ public class MessageGeneratorUtil {
     private String queueName;
 
     private String generatedMessage() {
-        String message = (messageNumber + " " + bindingKey + " time" + queueName);
+        String message = (messageNumber + ") queue: " + queueName + "; time: " + "; binding_key: " + bindingKey);
         messageNumber++;
         return message;
     }

@@ -10,7 +10,6 @@ import java.io.IOException;
  */
 public class AmqpSender {
     private static Channel channel = AmqpUtils.getChannel();
-
     /**
      * todo java doc
      */

@@ -11,9 +11,16 @@ import java.util.LinkedHashMap;
 
 public class MapUtil {
     @Getter
-    private static LinkedHashMap<String, String> queueMessage = new LinkedHashMap();
+    private static LinkedHashMap<String, String> queueMessage = new LinkedHashMap<>();
 
     public static void addMessage(String message, String bindingKey) {
-        queueMessage.put( bindingKey, message );
+        queueMessage.put( message, bindingKey );
     }
+//
+//    public static LinkedHashMap<String, String> copyMap(LinkedHashMap<String, String> map) {
+//        return (LinkedHashMap<String, String>) map.clone();
+//    }
+//    public static void clearMap() {
+//        queueMessage.clear();
+//    }
 }

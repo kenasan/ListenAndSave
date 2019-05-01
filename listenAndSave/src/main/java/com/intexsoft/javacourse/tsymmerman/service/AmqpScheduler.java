@@ -6,7 +6,7 @@ import com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants;
 /**
  * todo annotation
  */
-public class Scheduler implements Runnable {
+public class AmqpScheduler implements Runnable {
 
     @Override
     public void run() {
