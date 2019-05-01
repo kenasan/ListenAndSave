@@ -2,12 +2,18 @@ package com.intexsoft.javacourse.tsymmerman.service;
 
 import com.intexsoft.javacourse.tsymmerman.Util.MessageGeneratorUtil;
 import com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 /**
- * todo annotation
+ * Be active all time, and send a message with some delay
  */
 public class AmqpScheduler implements Runnable {
+    private static Logger log = Logger.getLogger( AmqpListener.class );
 
+    /**
+     * Override method from interface Runnable, and mean that body always be active, and send message with delay.
+     */
     @Override
     public void run() {
         while (true) {
@@ -18,6 +24,7 @@ public class AmqpScheduler implements Runnable {
                 Thread.sleep( RabbitConstants.SECONDS_DELAY * 1000 );
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                log.log( Level.ERROR, "Exception: ", e );
             }
         }
     }

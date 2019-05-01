@@ -4,17 +4,24 @@ import com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants;
 import com.intexsoft.javacourse.tsymmerman.service.AmqpListener;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
 /**
- * Created by kenasan on 01.05.2019.
+ * Util class that declare consumer of message
  */
 public class ConsumerUtil {
-
+final private Logger log = Logger.getLogger( ConsumerUtil.class );
     private Channel channel = AmqpUtils.getChannel();
-    DeliverCallback deliverCallback = AmqpListener.getDeliverCallback();
+    private DeliverCallback deliverCallback = AmqpListener.getDeliverCallback();
 
+    /**
+     * Constructor take sending parameters and initialize object Constructor
+     * @param nameFirstQueue
+     * @param nameSecondQueue
+     */
     public ConsumerUtil(String nameFirstQueue, String nameSecondQueue) {
         getDeclareConsumer( nameFirstQueue,RabbitConstants.FIRST_ROUTING_KEY  );
         getDeclareConsumer( nameSecondQueue, RabbitConstants.SECOND_ROUTING_KEY );
@@ -28,6 +35,7 @@ public class ConsumerUtil {
             } );
         } catch (IOException e) {
             e.printStackTrace();
+            log.log( Level.ERROR, "Exception: ", e);
         }
     }
 }
