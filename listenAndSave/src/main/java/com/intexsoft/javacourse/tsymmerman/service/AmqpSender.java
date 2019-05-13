@@ -15,7 +15,7 @@ public class AmqpSender {
     private static Channel channel = AmqpUtils.getChannel();
 
     /**
-     * When called send message.
+     * When called sand message.
      */
     public void send(String exchange, String bindingKey, String message) {
         try {

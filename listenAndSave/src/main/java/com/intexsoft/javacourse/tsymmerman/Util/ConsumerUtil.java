@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 
 /**
- * Util class that declare consumer of message
+ * Util class that declare consumer of message.
  */
 public class ConsumerUtil {
 final private Logger log = Logger.getLogger( ConsumerUtil.class );
@@ -18,9 +18,9 @@ final private Logger log = Logger.getLogger( ConsumerUtil.class );
     private DeliverCallback deliverCallback = AmqpListener.getDeliverCallback();
 
     /**
-     * Constructor take sending parameters and initialize object Constructor
-     * @param nameFirstQueue
-     * @param nameSecondQueue
+     * Constructor take sending parameters and initialize object.
+     * @param nameFirstQueue - name of first queue.
+     * @param nameSecondQueue - name of second queue.
      */
     public ConsumerUtil(String nameFirstQueue, String nameSecondQueue) {
         getDeclareConsumer( nameFirstQueue,RabbitConstants.FIRST_ROUTING_KEY  );

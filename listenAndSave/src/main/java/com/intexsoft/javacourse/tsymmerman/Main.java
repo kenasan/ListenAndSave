@@ -11,12 +11,11 @@ import org.apache.log4j.BasicConfigurator;
 public class Main {
 
     /**
-     * The main method of Main class entry point of program.
      * Create Listener to save received message to map and write to file
-     * and Scheduler which send a message with delay
-     *
-     * @param args
+     * and Scheduler which send a message with delay.
+     * @param args parameters of main method.
      */
+
     public static void main(String[] args) {
         BasicConfigurator.configure();
         AmqpUtils.createConnection();

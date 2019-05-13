@@ -8,14 +8,18 @@ import org.apache.log4j.Logger;
 /**
  * Be active all time, and send a message with some delay
  */
+
 public class AmqpScheduler implements Runnable {
     private static Logger log = Logger.getLogger( AmqpListener.class );
 
     /**
-     * Override method from interface Runnable, and mean that body always be active, and send message with delay.
+     * Override method from interface Runnable, and mean that body always be active,
+     * and send message with delay.
      */
+
     @Override
     public void run() {
+
         while (true) {
             try {
                 MessageGeneratorUtil messageGenerator = new MessageGeneratorUtil();

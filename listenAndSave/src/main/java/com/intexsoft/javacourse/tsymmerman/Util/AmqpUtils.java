@@ -15,7 +15,7 @@ import static com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants.EXCHA
 import static com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants.HOST_NAME;
 
 /**
- * Util class that create connection to rabbit mq
+ * Util class that create connection to rabbit mq.
  */
 public abstract class AmqpUtils {
     private static Logger log = Logger.getLogger( AmqpUtils.class );
@@ -23,7 +23,7 @@ public abstract class AmqpUtils {
     private static Channel channel;
 
     /**
-     * after colling create connection
+     * After colling create connection.
      */
     public static void createConnection() {
         ConnectionFactory factory = new ConnectionFactory();

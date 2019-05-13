@@ -13,11 +13,13 @@ import java.util.Map;
  */
 public class FileGenerateUtil {
     private static Logger log = Logger.getLogger( "Save file" );
-
     private static int count;
 
     /**
-     * When method is calling with parameters start write messages at file.
+     * When method is calling with parameters start write messages in file.
+     * @param messageMap - map of massages.
+     * @param nameQueue - name of queue, which will be saved.
+     * @param bindingKey - name of key, by which will be sorting map.
      */
     public static void saveFile(LinkedHashMap<String, String> messageMap, String nameQueue, String bindingKey) {
         Iterator iterator = messageMap.entrySet().iterator();
