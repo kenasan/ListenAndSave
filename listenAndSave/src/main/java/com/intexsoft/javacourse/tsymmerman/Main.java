@@ -1,6 +1,6 @@
 package com.intexsoft.javacourse.tsymmerman;
 
-import com.intexsoft.javacourse.tsymmerman.Util.AmqpUtils;
+import com.intexsoft.javacourse.tsymmerman.util.AmqpUtils;
 import com.intexsoft.javacourse.tsymmerman.service.AmqpListener;
 import com.intexsoft.javacourse.tsymmerman.service.AmqpScheduler;
 import org.apache.log4j.BasicConfigurator;
@@ -13,6 +13,7 @@ public class Main {
     /**
      * Create Listener to save received message to map and write to file
      * and Scheduler which send a message with delay.
+     *
      * @param args parameters of main method.
      */
 

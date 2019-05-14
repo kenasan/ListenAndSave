@@ -3,7 +3,6 @@ package com.intexsoft.javacourse.tsymmerman.constant;
 /**
  * Class of constants which used in program.
  */
-
 public abstract class RabbitConstants {
     public static final String HOST_NAME = "localhost";
     public static final String EXCHANGE = "exchange";

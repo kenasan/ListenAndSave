@@ -1,12 +1,11 @@
-package com.intexsoft.javacourse.tsymmerman.Util;
+package com.intexsoft.javacourse.tsymmerman.util;
 
 import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.Getter;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -17,8 +16,8 @@ import static com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants.HOST_
 /**
  * Util class that create connection to rabbit mq.
  */
+@Log4j
 public abstract class AmqpUtils {
-    private static Logger log = Logger.getLogger( AmqpUtils.class );
     @Getter
     private static Channel channel;
 
@@ -27,14 +26,13 @@ public abstract class AmqpUtils {
      */
     public static void createConnection() {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost( HOST_NAME );
+        factory.setHost(HOST_NAME);
         try {
             Connection connection = factory.newConnection();
             channel = connection.createChannel();
-            channel.exchangeDeclare( EXCHANGE, BuiltinExchangeType.DIRECT );
+            channel.exchangeDeclare(EXCHANGE, BuiltinExchangeType.DIRECT);
         } catch (IOException | TimeoutException e) {
-            e.printStackTrace();
-            log.log( Level.ERROR, "Exception: ", e );
+            log.error("Exception: ", e);
         }
     }
 }

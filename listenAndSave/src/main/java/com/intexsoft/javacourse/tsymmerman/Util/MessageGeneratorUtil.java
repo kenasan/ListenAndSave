@@ -1,4 +1,4 @@
-package com.intexsoft.javacourse.tsymmerman.Util;
+package com.intexsoft.javacourse.tsymmerman.util;
 
 import com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import java.util.Date;
 /**
  * Generate message with random binding key.
  */
-
 public class MessageGeneratorUtil {
 
     private static int messageNumber = 1;

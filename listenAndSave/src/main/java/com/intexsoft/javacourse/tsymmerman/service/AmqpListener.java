@@ -1,12 +1,12 @@
 package com.intexsoft.javacourse.tsymmerman.service;
 
-import com.intexsoft.javacourse.tsymmerman.Util.ConsumerUtil;
-import com.intexsoft.javacourse.tsymmerman.Util.FileGenerateUtil;
 import com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants;
+import com.intexsoft.javacourse.tsymmerman.util.ConsumerUtil;
+import com.intexsoft.javacourse.tsymmerman.util.SaveFileUtil;
 import com.rabbitmq.client.DeliverCallback;
 import com.rabbitmq.client.Delivery;
 import lombok.Getter;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
@@ -15,8 +15,8 @@ import java.util.LinkedHashMap;
  * Active and listen, when calling consumer take a messages and add in map.
  * After some amount of messages write it to file.
  */
+@Log4j
 public class AmqpListener {
-    private static Logger log = Logger.getLogger( "Receive message" );
     private static int messageNumber = 1;
     private static LinkedHashMap<String, String> queueMessage = new LinkedHashMap<>();
     @Getter
@@ -26,7 +26,7 @@ public class AmqpListener {
      * Constructor start listener and before declare consumers.
      */
     public AmqpListener() {
-        new ConsumerUtil( RabbitConstants.FIRST_QUEUE_NAME, RabbitConstants.SECOND_QUEUE_NAME );
+        new ConsumerUtil(RabbitConstants.FIRST_QUEUE_NAME, RabbitConstants.SECOND_QUEUE_NAME);
     }
 
     /**
@@ -34,8 +34,8 @@ public class AmqpListener {
      */
     public static DeliverCallback getCallback() {
         return (consumerTag, delivery) -> {
-            queueMessage.put( getMessage( delivery ), getRoutingKey( delivery ) );
-            log.info( getMessage( delivery ) );
+            queueMessage.put(getMessage(delivery), getRoutingKey(delivery));
+            log.info(getMessage(delivery));
             ifReadyWrite();
         };
     }
@@ -45,12 +45,12 @@ public class AmqpListener {
     }
 
     private static String getMessage(Delivery delivery) throws UnsupportedEncodingException {
-        return new String( delivery.getBody(), "UTF-8" );
+        return new String(delivery.getBody(), "UTF-8");
     }
 
     private static void ifReadyWrite() {
         if (messageNumber == RabbitConstants.FILE_NUMBER_MESSAGES) {
-            save( queueMessage );
+            save(queueMessage);
             queueMessage.clear();
         } else {
             messageNumber++;
@@ -58,8 +58,8 @@ public class AmqpListener {
     }
 
     private static void save(LinkedHashMap<String, String> map) {
-        FileGenerateUtil.saveFile( map, RabbitConstants.FIRST_QUEUE_NAME, RabbitConstants.FIRST_ROUTING_KEY );
-        FileGenerateUtil.saveFile( map, RabbitConstants.SECOND_QUEUE_NAME, RabbitConstants.SECOND_ROUTING_KEY );
+        SaveFileUtil.saveFile(map, RabbitConstants.FIRST_QUEUE_NAME, RabbitConstants.FIRST_ROUTING_KEY);
+        SaveFileUtil.saveFile(map, RabbitConstants.SECOND_QUEUE_NAME, RabbitConstants.SECOND_ROUTING_KEY);
         messageNumber = 1;
     }
 }

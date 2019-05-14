@@ -1,29 +1,27 @@
 package com.intexsoft.javacourse.tsymmerman.service;
 
-import com.intexsoft.javacourse.tsymmerman.Util.AmqpUtils;
+import com.intexsoft.javacourse.tsymmerman.util.AmqpUtils;
 import com.rabbitmq.client.Channel;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 
 import java.io.IOException;
 
 /**
  * Sending generated message to exchange.
  */
+@Log4j
 public class AmqpSender {
-    private static Logger log = Logger.getLogger( "Send" );
     private static Channel channel = AmqpUtils.getChannel();
 
     /**
-     * When called sand message.
+     * When called send message.
      */
     public void send(String exchange, String bindingKey, String message) {
         try {
-            channel.basicPublish( exchange, bindingKey, null, message.getBytes( "UTF-8" ) );
-            log.info( message );
+            channel.basicPublish(exchange, bindingKey, null, message.getBytes("UTF-8"));
+            log.info(message);
         } catch (IOException e) {
-            e.printStackTrace();
-            log.log( Level.ERROR, "Exception: ", e );
+            log.error("Exception: ", e);
         }
     }
 }
