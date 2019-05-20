@@ -14,13 +14,12 @@ import static com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants.EXCHA
 import static com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants.HOST_NAME;
 
 /**
- * Util class that create connection to rabbit mq.
+ * Util class that create connection to RabbitMQ.
  */
 @Log4j
 public abstract class AmqpUtils {
     @Getter
     private static Channel channel;
-
     /**
      * After colling create connection.
      */
@@ -32,7 +31,7 @@ public abstract class AmqpUtils {
             channel = connection.createChannel();
             channel.exchangeDeclare(EXCHANGE, BuiltinExchangeType.DIRECT);
         } catch (IOException | TimeoutException e) {
-            log.error("Exception: ", e);
+            log.error("Connection doesn't create a chanel. Exception: ", e);
         }
     }
 }

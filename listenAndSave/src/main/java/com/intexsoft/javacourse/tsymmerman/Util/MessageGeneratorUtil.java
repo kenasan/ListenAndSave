@@ -1,22 +1,21 @@
 package com.intexsoft.javacourse.tsymmerman.util;
 
-import com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants;
 import lombok.Getter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants.*;
+
 /**
  * Generate message with random binding key.
  */
+@Getter
 public class MessageGeneratorUtil {
-
     private static int messageNumber = 1;
-    private String queueName;
+    private String queueName = FIRST_QUEUE_NAME;
     private SimpleDateFormat dateFormat = new SimpleDateFormat( "hh:mm:ss a" );
-    @Getter
     private String bindingKey = generateBindingKey();
-    @Getter
     private String message = generateMessage();
 
     private String generateMessage() {
@@ -26,7 +25,7 @@ public class MessageGeneratorUtil {
     }
 
     private String getText() {
-        return String.format( "%s) queue: %s; time: %s; binding_key: %s.", messageNumber, queueName, getTime(), bindingKey );
+        return String.format("%s) queue: %s; time: %s; binding_key: %s.", messageNumber, queueName, getTime(), bindingKey);
     }
 
     private String generateBindingKey() {
@@ -36,16 +35,16 @@ public class MessageGeneratorUtil {
 
     private String getBindingKey(int randomNumber) {
         if (randomNumber == 0) {
-            queueName = RabbitConstants.FIRST_QUEUE_NAME;
-            return RabbitConstants.FIRST_ROUTING_KEY;
+            queueName = FIRST_QUEUE_NAME;
+            return FIRST_ROUTING_KEY;
         } else {
-            queueName = RabbitConstants.SECOND_QUEUE_NAME;
-            return RabbitConstants.SECOND_ROUTING_KEY;
+            queueName = SECOND_QUEUE_NAME;
+            return SECOND_ROUTING_KEY;
         }
     }
 
     private String getTime() {
         Date date = new Date();
-        return dateFormat.format( date );
+        return dateFormat.format(date);
     }
 }

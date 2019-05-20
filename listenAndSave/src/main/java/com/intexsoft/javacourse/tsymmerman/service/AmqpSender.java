@@ -6,6 +6,8 @@ import lombok.extern.log4j.Log4j;
 
 import java.io.IOException;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * Sending generated message to exchange.
  */
@@ -18,10 +20,10 @@ public class AmqpSender {
      */
     public void send(String exchange, String bindingKey, String message) {
         try {
-            channel.basicPublish(exchange, bindingKey, null, message.getBytes("UTF-8"));
+            channel.basicPublish(exchange, bindingKey, null, message.getBytes(UTF_8));
             log.info(message);
         } catch (IOException e) {
-            log.error("Exception: ", e);
+            log.error("Sender don't publish a message. Exception: ", e);
         }
     }
 }

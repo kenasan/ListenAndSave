@@ -22,7 +22,7 @@ public class AmqpScheduler implements Runnable {
                 amqpSender.send(RabbitConstants.EXCHANGE, messageGenerator.getBindingKey(), messageGenerator.getMessage());
                 Thread.sleep(RabbitConstants.SECONDS_DELAY * 1000);
             } catch (InterruptedException e) {
-                log.error("Exception: ", e);
+                log.error("Delay was finished with interrupt. Exception: ", e);
             }
         }
     }

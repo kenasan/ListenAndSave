@@ -1,42 +1,58 @@
 package com.intexsoft.javacourse.tsymmerman.service;
 
 import com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants;
-import com.intexsoft.javacourse.tsymmerman.util.ConsumerUtil;
+import com.intexsoft.javacourse.tsymmerman.model.AmqpMessage;
+import com.intexsoft.javacourse.tsymmerman.util.AmqpUtils;
 import com.intexsoft.javacourse.tsymmerman.util.SaveFileUtil;
+import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 import com.rabbitmq.client.Delivery;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants.*;
 
 /**
- * Active and listen, when calling consumer take a messages and add in map.
- * After some amount of messages write it to file.
+ * Active and listen, when calling consumer take a messagesList and add in map.
+ * After some amount of messagesList write it to file.
  */
 @Log4j
 public class AmqpListener {
-    private static int messageNumber = 1;
-    private static LinkedHashMap<String, String> queueMessage = new LinkedHashMap<>();
     @Getter
-    private static DeliverCallback deliverCallback = getCallback();
+    private static DeliverCallback deliverCallback;
+    private static Map<String, List<String>> messagesQueuesMap;
+    private static List<AmqpMessage> messagesList;
+    private Channel channel;
+    static AmqpMessage amqpMessage;
 
     /**
      * Constructor start listener and before declare consumers.
      */
     public AmqpListener() {
-        new ConsumerUtil(RabbitConstants.FIRST_QUEUE_NAME, RabbitConstants.SECOND_QUEUE_NAME);
+        deliverCallback = getCallback();
+        messagesQueuesMap = new LinkedHashMap<>();
+        messagesList = new ArrayList<>();
+        channel = AmqpUtils.getChannel();
+        getConsumers(FIRST_QUEUE_NAME, SECOND_QUEUE_NAME);
     }
 
-    /**
-     * Called when message delivered to consumer.
-     */
-    public static DeliverCallback getCallback() {
+    private static DeliverCallback getCallback() {
         return (consumerTag, delivery) -> {
-            queueMessage.put(getMessage(delivery), getRoutingKey(delivery));
-            log.info(getMessage(delivery));
-            ifReadyWrite();
+            final String routingKey = getRoutingKey(delivery);
+            final String message = getMessage(delivery);
+            log.info(String.format("Got message from queue with RK %s: %s", routingKey, message));
+            amqpMessage = AmqpMessage.builder().routingKey(routingKey).message(message).build();
+            messagesList.add(amqpMessage);
+            checkLimitAndSave();
         };
     }
 
@@ -45,22 +61,44 @@ public class AmqpListener {
     }
 
     private static String getMessage(Delivery delivery) throws UnsupportedEncodingException {
-        return new String(delivery.getBody(), "UTF-8");
+        return new String(delivery.getBody(), StandardCharsets.UTF_8);
     }
 
-    private static void ifReadyWrite() {
-        if (messageNumber == RabbitConstants.FILE_NUMBER_MESSAGES) {
-            save(queueMessage);
-            queueMessage.clear();
-        } else {
-            messageNumber++;
+    private static void checkLimitAndSave() {
+
+        if (isMessageLimit()){
+
+            messagesQueuesMap = messagesList.stream().collect(Collectors.groupingBy(AmqpMessage::getRoutingKey, Collectors.mapping(AmqpMessage::getMessage, Collectors.toList())));
+            saveMessagesToFiles(messagesQueuesMap);
+            // todo агрегация листа (stream?)
         }
     }
 
-    private static void save(LinkedHashMap<String, String> map) {
-        SaveFileUtil.saveFile(map, RabbitConstants.FIRST_QUEUE_NAME, RabbitConstants.FIRST_ROUTING_KEY);
-        SaveFileUtil.saveFile(map, RabbitConstants.SECOND_QUEUE_NAME, RabbitConstants.SECOND_ROUTING_KEY);
-        messageNumber = 1;
+    private static boolean isMessageLimit() {
+        return messagesList.size() == FILE_NUMBER_MESSAGES;
+    }
+
+    // todo расширить название метода   ?
+    private static void saveMessagesToFiles(Map<String, List<String>> map) {
+        SaveFileUtil.saveFile(map, RabbitConstants.FIRST_QUEUE_NAME);
+        SaveFileUtil.saveFile(map, RabbitConstants.SECOND_QUEUE_NAME);
+    }
+
+    private void getConsumers(String nameFirstQueue, String nameSecondQueue) {
+        declareConsumer(nameFirstQueue, RabbitConstants.FIRST_ROUTING_KEY);
+        declareConsumer(nameSecondQueue, RabbitConstants.SECOND_ROUTING_KEY);
+    }
+
+    // todo рекомендация: передавать в метод конкретный callBack   ?
+    private void declareConsumer(String nameQueue, String routingKey) {
+        try {
+            channel.queueDeclare(nameQueue, false, false, true, null);
+            channel.queueBind(nameQueue, EXCHANGE, routingKey);
+            channel.basicConsume(nameQueue, true, deliverCallback, consumerTag -> {
+            });
+        } catch (IOException e) {
+            log.error("Consumer was not declared. Exception:  ", e);
+        }
     }
 }
 
