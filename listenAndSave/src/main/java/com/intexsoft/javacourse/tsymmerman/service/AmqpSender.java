@@ -13,7 +13,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 @Log4j
 public class AmqpSender {
-    private static Channel channel = AmqpUtils.getChannel();
+    private static Channel channel;
+
+    public AmqpSender() {
+        channel = AmqpUtils.getChannel();
+    }
 
     /**
      * When called send message.

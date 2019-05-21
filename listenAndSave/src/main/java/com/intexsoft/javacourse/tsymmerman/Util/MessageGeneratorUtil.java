@@ -2,8 +2,8 @@ package com.intexsoft.javacourse.tsymmerman.util;
 
 import lombok.Getter;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import static com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants.*;
 
@@ -12,11 +12,17 @@ import static com.intexsoft.javacourse.tsymmerman.constant.RabbitConstants.*;
  */
 @Getter
 public class MessageGeneratorUtil {
-    private static int messageNumber = 1;
-    private String queueName = FIRST_QUEUE_NAME;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat( "hh:mm:ss a" );
-    private String bindingKey = generateBindingKey();
-    private String message = generateMessage();
+    private static int messageNumber;
+    private String queueName;
+    private String bindingKey;
+    private String message;
+    private String time;
+
+    public MessageGeneratorUtil() {
+        bindingKey = generateBindingKey();
+        message = generateMessage();
+        time = getTime();
+    }
 
     private String generateMessage() {
         String message = getText();
@@ -30,7 +36,7 @@ public class MessageGeneratorUtil {
 
     private String generateBindingKey() {
         int randomNumber = (int) (Math.random() * 2);
-        return getBindingKey( randomNumber );
+        return getBindingKey(randomNumber);
     }
 
     private String getBindingKey(int randomNumber) {
@@ -44,7 +50,7 @@ public class MessageGeneratorUtil {
     }
 
     private String getTime() {
-        Date date = new Date();
-        return dateFormat.format(date);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        return LocalTime.now().format(timeFormatter);
     }
 }

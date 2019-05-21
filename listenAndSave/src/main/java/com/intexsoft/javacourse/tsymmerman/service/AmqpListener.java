@@ -66,11 +66,10 @@ public class AmqpListener {
 
     private static void checkLimitAndSave() {
 
-        if (isMessageLimit()){
-
-            messagesQueuesMap = messagesList.stream().collect(Collectors.groupingBy(AmqpMessage::getRoutingKey, Collectors.mapping(AmqpMessage::getMessage, Collectors.toList())));
-            saveMessagesToFiles(messagesQueuesMap);
-            // todo агрегация листа (stream?)
+        if (isMessageLimit()) {
+            messagesQueuesMap = messagesList.stream().collect(Collectors.groupingBy(AmqpMessage::getRoutingKey,
+                    Collectors.mapping(AmqpMessage::getMessage, Collectors.toList())));
+            saveFileMessagesByQueue(messagesQueuesMap);
         }
     }
 
@@ -78,10 +77,8 @@ public class AmqpListener {
         return messagesList.size() == FILE_NUMBER_MESSAGES;
     }
 
-    // todo расширить название метода   ?
-    private static void saveMessagesToFiles(Map<String, List<String>> map) {
-        SaveFileUtil.saveFile(map, RabbitConstants.FIRST_QUEUE_NAME);
-        SaveFileUtil.saveFile(map, RabbitConstants.SECOND_QUEUE_NAME);
+    private static void saveFileMessagesByQueue(Map<String, List<String>> messagesQueuesMap) {
+        SaveFileUtil.saveFileMessagesByQueue(messagesQueuesMap);
     }
 
     private void getConsumers(String nameFirstQueue, String nameSecondQueue) {
@@ -101,4 +98,3 @@ public class AmqpListener {
         }
     }
 }
-
